@@ -21,3 +21,10 @@ The trade-off is that `DataView` bounds-checks every call, so you pay for a leng
 ## Edge cases
 
 Offset must be a non-negative integer; fractional, `NaN`, or negative values throw `RangeError` before any read or write happens. Out-of-range access also throws `RangeError`. `DataView`'s truncation semantics apply to oversized values (e.g. `writeUint8(buf, 300)` writes `44`), so callers are responsible for range-checking the values they hand in.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
